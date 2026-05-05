@@ -12,7 +12,8 @@ const app = exp();
 
 app.use(cors({
   origin:[ "http://localhost:5173",
-  "http://localhost:5174",],
+  "http://localhost:5174",
+"https://blog-app-rust-xi.vercel.app"],
   credentials: true,
 }));
 app.use(exp.json());
