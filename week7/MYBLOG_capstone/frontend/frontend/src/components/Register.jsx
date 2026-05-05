@@ -5,18 +5,17 @@ import {
 import { useForm } from "react-hook-form"
 import { NavLink, useNavigate } from "react-router"
 import { useState } from "react"
+import { toast } from "react-hot-toast"
 import api from "../services/api"
 
 function Register() {
   const { register, handleSubmit, formState: { errors } } = useForm()
   const [loading, setLoading] = useState(false)
   const [apiError, setApiError] = useState(null)
-  const [preview, setPriview] = useState(null)
+  const [preview, setPreview] = useState(null)
   const navigate = useNavigate()
 
   const onUserRegister = async (userObj) => {
-    let { profileImageUrl } = userObj
-
     const formData = new FormData()
     formData.append("role", userObj.role)
     formData.append("firstName", userObj.firstName)
@@ -24,18 +23,21 @@ function Register() {
     formData.append("email", userObj.email)
     formData.append("password", userObj.password)
 
-    if (profileImageUrl?.[0]) {
-      formData.append("profileImageUrl", profileImageUrl[0])
+    if (userObj.profileImageUrl?.[0]) {
+      formData.append("profileImageUrl", userObj.profileImageUrl[0])
     }
 
     try {
       setLoading(true)
-      let res = await api.post("/auth/users", formData)
+      setApiError(null)
+      const res = await api.post("/auth/users", formData)
       if (res.status === 201) {
+        toast.success("Account created! Please login.")
         navigate("/login")
       }
     } catch (err) {
-      setApiError(err.response?.data?.error || "Registration failed")
+      // backend returns message not error
+      setApiError(err.response?.data?.message || "Registration failed")
     } finally {
       setLoading(false)
     }
@@ -149,9 +151,9 @@ function Register() {
                   },
                 },
               })}
-              onChange={(event) => {
-                let file = event.target.files[0]
-                if (file) setPriview(URL.createObjectURL(file))
+              onChange={(e) => {
+                const file = e.target.files[0]
+                if (file) setPreview(URL.createObjectURL(file))
               }}
             />
             {errors.profileImageUrl && <p className={errorClass}>{errors.profileImageUrl.message}</p>}
@@ -163,7 +165,9 @@ function Register() {
             )}
           </div>
 
-          <button type="submit" className={submitBtn}>Create Account</button>
+          <button type="submit" className={submitBtn} disabled={loading}>
+            {loading ? "Creating..." : "Create Account"}
+          </button>
         </form>
 
         <p className={`${mutedText} text-center mt-5`}>

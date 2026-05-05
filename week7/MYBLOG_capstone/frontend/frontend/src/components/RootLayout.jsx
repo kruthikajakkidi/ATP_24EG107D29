@@ -22,7 +22,7 @@ function RootLayout() {
   return (
     <div>
       <Header />
-      <div className="min-h-screen mx-32">
+      <div className="min-h-screen px-4 sm:px-8 md:px-16 lg:px-32">
         <Outlet />
       </div>
       <Footer />

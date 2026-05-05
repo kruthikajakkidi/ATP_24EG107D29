@@ -1,16 +1,18 @@
-import { createBrowserRouter, RouterProvider } from "react-router";
+import { createBrowserRouter, RouterProvider } from "react-router"
 
-import RootLayout from "./components/RootLayout";
-import Home from "./components/Home";
-import Register from "./components/Register";
-import Login from "./components/Login";
-import UserProfile from "./components/UserProfile";
-import AuthorProfile from "./components/AuthorProfile";
-import AuthorArticles from "./components/AuthorArticles";
-import EditArticle from './components/EditArticle'
-import WriteArticles from "./components/WriteArticles";
-import ArticleByID from "./components/ArticleById";
-import AdminProfile from "./components/AdminProfile";
+import RootLayout from "./components/RootLayout"
+import Home from "./components/Home"
+import Register from "./components/Register"
+import Login from "./components/Login"
+import UserProfile from "./components/UserProfile"
+import AuthorProfile from "./components/AuthorProfile"
+import AuthorArticles from "./components/AuthorArticles"
+import EditArticle from "./components/EditArticle"
+import WriteArticles from "./components/WriteArticles"
+import ArticleByID from "./components/ArticleById"
+import AdminProfile from "./components/AdminProfile"
+import ProtectedRoute from "./components/ProtectedRoute"
+import Unauthorized from "./components/Unauthorized"
 
 function App() {
   const routerObj = createBrowserRouter([
@@ -31,12 +33,24 @@ function App() {
           element: <Login />,
         },
         {
+          path: "unauthorized",
+          element: <Unauthorized />,
+        },
+        {
           path: "user-profile",
-          element: <UserProfile />,
+          element: (
+            <ProtectedRoute allowedRoles={["USER"]}>
+              <UserProfile />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "author-profile",
-          element: <AuthorProfile />,
+          element: (
+            <ProtectedRoute allowedRoles={["AUTHOR"]}>
+              <AuthorProfile />
+            </ProtectedRoute>
+          ),
           children: [
             {
               index: true,
@@ -54,21 +68,33 @@ function App() {
         },
         {
           path: "admin-profile",
-          element: <AdminProfile />,
+          element: (
+            <ProtectedRoute allowedRoles={["ADMIN"]}>
+              <AdminProfile />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "article/:id",
-          element: <ArticleByID />,
+          element: (
+            <ProtectedRoute allowedRoles={["USER", "AUTHOR", "ADMIN"]}>
+              <ArticleByID />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "edit-article",
-          element: <EditArticle />,
+          element: (
+            <ProtectedRoute allowedRoles={["AUTHOR"]}>
+              <EditArticle />
+            </ProtectedRoute>
+          ),
         },
       ],
     },
-  ]);
+  ])
 
-  return <RouterProvider router={routerObj} />;
+  return <RouterProvider router={routerObj} />
 }
 
-export default App;
+export default App

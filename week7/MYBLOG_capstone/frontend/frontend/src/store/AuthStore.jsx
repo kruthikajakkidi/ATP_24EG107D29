@@ -8,7 +8,7 @@ const API = axios.create({
 
 export const useAuth = create((set) => ({
   currentUser: null,
-  loading: false,
+  loading: true,
   isAuthenticated: false,
   error: null,
 

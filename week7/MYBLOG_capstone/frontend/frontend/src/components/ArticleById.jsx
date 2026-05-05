@@ -5,28 +5,11 @@ import { toast } from "react-hot-toast"
 import { useForm } from "react-hook-form"
 import api from "../services/api"
 import {
-  articlePageWrapper,
-  articleHeader,
-  articleCategory,
-  articleMainTitle,
-  articleAuthorRow,
-  authorInfo,
-  articleContent,
-  articleFooter,
-  articleActions,
-  editBtn,
-  deleteBtn,
-  loadingClass,
-  errorClass,
-  inputClass,
-  commentsWrapper,
-  commentCard,
-  commentHeader,
-  commentUserRow,
-  avatar,
-  commentUser,
-  commentTime,
-  commentText,
+  articlePageWrapper, articleHeader, articleCategory, articleMainTitle,
+  articleAuthorRow, authorInfo, articleContent, articleFooter,
+  articleActions, editBtn, deleteBtn, loadingClass, errorClass,
+  inputClass, commentsWrapper, commentCard, commentHeader,
+  commentUserRow, avatar, commentUser, commentTime, commentText,
 } from "../styles/common.js"
 
 function ArticleByID() {
@@ -46,17 +29,18 @@ function ArticleByID() {
     const getArticle = async () => {
       setLoading(true)
       try {
-        const res = await api.get(`/user-api/article/${id}`).catch(async (err) => {
-          if (err.response?.status === 403) {
-            return await api.get(`/author-api/articles`).then((r) => {
-              const found = r.data.payload?.find((a) => a._id === id)
-              if (!found) throw new Error("Article not found")
-              return { data: { payload: found } }
-            })
-          }
-          throw err
-        })
-        setArticle(res.data.payload)
+        let res
+
+        // fetch based on role to avoid unnecessary fallback
+        if (user?.role === "AUTHOR") {
+          res = await api.get("/author-api/articles")
+          const found = res.data.payload?.find((a) => a._id === id)
+          if (!found) throw new Error("Article not found")
+          setArticle(found)
+        } else {
+          res = await api.get(`/user-api/article/${id}`)
+          setArticle(res.data.payload)
+        }
       } catch (err) {
         setError(err.response?.data?.message || err.message || "Failed to load article")
       } finally {
@@ -64,7 +48,7 @@ function ArticleByID() {
       }
     }
     getArticle()
-  }, [id])
+  }, [id, user])
 
   const formatDate = (date) => {
     return new Date(date).toLocaleString("en-IN", {
@@ -76,8 +60,7 @@ function ArticleByID() {
 
   const toggleArticleStatus = async () => {
     const newStatus = !article.isArticleActive
-    const confirmMsg = newStatus ? "Restore this article?" : "Delete this article?"
-    if (!window.confirm(confirmMsg)) return
+    if (!window.confirm(newStatus ? "Restore this article?" : "Delete this article?")) return
     try {
       const res = await api.patch("/author-api/articles", {
         articleId: article._id,
@@ -86,12 +69,7 @@ function ArticleByID() {
       setArticle(res.data.payload)
       toast.success(res.data.message)
     } catch (err) {
-      const msg = err.response?.data?.message
-      if (err.response?.status === 400) {
-        toast(msg)
-      } else {
-        setError(msg || "Operation failed")
-      }
+      toast.error(err.response?.data?.message || "Operation failed")
     }
   }
 
@@ -107,7 +85,7 @@ function ArticleByID() {
     try {
       setCommentLoading(true)
       commentObj.articleId = article._id
-      let res = await api.put("/user-api/articles", commentObj)
+      const res = await api.put("/user-api/articles", commentObj)
       if (res.status === 200) {
         setArticle(res.data.payload)
         resetForm()
@@ -215,8 +193,10 @@ function ArticleByID() {
 
           const firstLetter = name.charAt(0).toUpperCase()
 
-          const isOwnComment = commentObj.user?._id?.toString() === user?._id?.toString()
-            || commentObj.user?._id?.toString() === user?.id?.toString()
+          const isOwnComment =
+            commentObj.user?._id?.toString() === user?._id?.toString() ||
+            commentObj.user?._id?.toString() === user?.id?.toString()
+
           const canDelete = user?.role === "AUTHOR" || (user?.role === "USER" && isOwnComment)
 
           return (
@@ -226,9 +206,7 @@ function ArticleByID() {
                   <div className={avatar}>{firstLetter}</div>
                   <div>
                     <p className={commentUser}>{name}</p>
-                    <p className={commentTime}>
-                      {formatDate(commentObj.createdAt || new Date())}
-                    </p>
+                    <p className={commentTime}>{formatDate(commentObj.createdAt || new Date())}</p>
                   </div>
                 </div>
 
@@ -237,7 +215,7 @@ function ArticleByID() {
                     onClick={() => deleteComment(commentObj._id)}
                     className="ml-auto text-xs text-red-400 hover:text-red-600 transition px-2 py-1 rounded hover:bg-red-50"
                   >
-                    🗑 Delete
+                    Delete
                   </button>
                 )}
               </div>
