@@ -8,18 +8,17 @@ const API = axios.create({
 
 export const useAuth = create((set) => ({
   currentUser: null,
-  loading: true,
+  loading: false,
   isAuthenticated: false,
   error: null,
 
   login: async (userCred) => {
     try {
       set({ loading: true, currentUser: null, isAuthenticated: false, error: null })
-      let res = await API.post("/auth/login", userCred)
+      const res = await API.post("/auth/login", userCred)
 
       if (res.status === 200) {
         const user = res.data?.payload
-        // make sure both id and _id are available on the user object
         const normalizedUser = { ...user, id: user._id?.toString() ?? user.id }
         set({ currentUser: normalizedUser, loading: false, isAuthenticated: true, error: null })
       }
@@ -37,7 +36,7 @@ export const useAuth = create((set) => ({
     try {
       await API.get("/auth/logout")
     } catch (err) {
-      // clear state even if server call fails
+      if (import.meta.env.DEV) console.warn("Logout request failed", err)
     } finally {
       set({ currentUser: null, isAuthenticated: false, error: null, loading: false })
     }
@@ -45,9 +44,11 @@ export const useAuth = create((set) => ({
 
   checkAuth: async () => {
     try {
-      set({ loading: true })
+      set({ loading: true, error: null })
       const res = await API.get("/auth/check-auth")
-      set({ currentUser: res.data.payload, isAuthenticated: true, loading: false })
+      const user = res.data?.payload
+      const normalizedUser = { ...user, id: user._id?.toString() ?? user.id }
+      set({ currentUser: normalizedUser, isAuthenticated: true, loading: false })
     } catch (err) {
       set({ currentUser: null, isAuthenticated: false, loading: false })
     }

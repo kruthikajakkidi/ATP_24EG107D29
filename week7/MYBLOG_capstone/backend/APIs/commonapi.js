@@ -12,7 +12,6 @@ const { sign } = jwt
 export const commonApp = exp.Router()
 config()
 
-
 // register a new user or author
 commonApp.post("/users", upload.single("profileImageUrl"), async (req, res, next) => {
   let cloudinaryResult
@@ -20,12 +19,10 @@ commonApp.post("/users", upload.single("profileImageUrl"), async (req, res, next
     let allowedRoles = ["USER", "AUTHOR"]
     const newUser = req.body
 
-    // only user and author roles are allowed to register
     if (!allowedRoles.includes(newUser.role)) {
       return res.status(400).json({ message: "Invalid role" })
     }
 
-    // upload image to cloudinary if provided
     if (req.file) {
       cloudinaryResult = await uploadToCloudinary(req.file.buffer)
     }
@@ -39,15 +36,12 @@ commonApp.post("/users", upload.single("profileImageUrl"), async (req, res, next
     res.status(201).json({ message: "User created" })
   } catch (err) {
     console.log("err is ", err)
-
-    // cleanup cloudinary image if something went wrong
     if (cloudinaryResult?.public_id) {
       await cloudinary.uploader.destroy(cloudinaryResult.public_id)
     }
     next(err)
   }
 })
-
 
 // login for user, author and admin
 commonApp.post("/login", async (req, res, next) => {
@@ -62,7 +56,6 @@ commonApp.post("/login", async (req, res, next) => {
       return res.status(400).json({ message: "Invalid password" })
     }
 
-    // create jwt with user info
     const signedToken = sign(
       {
         id: user._id,
@@ -78,8 +71,8 @@ commonApp.post("/login", async (req, res, next) => {
 
     res.cookie("token", signedToken, {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure: true,
+      sameSite: "none",
     })
 
     let userObj = user.toObject()
@@ -91,17 +84,15 @@ commonApp.post("/login", async (req, res, next) => {
   }
 })
 
-
 // clear the cookie to log out
 commonApp.get("/logout", (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
-    secure: false,
-    sameSite: "lax",
+    secure: true,
+    sameSite: "none",
   })
   res.status(200).json({ message: "Logout success" })
 })
-
 
 // check if user is still authenticated on page refresh
 commonApp.get("/check-auth", verifyToken("USER", "AUTHOR", "ADMIN"), (req, res) => {
@@ -111,13 +102,11 @@ commonApp.get("/check-auth", verifyToken("USER", "AUTHOR", "ADMIN"), (req, res) 
   })
 })
 
-
 // change password
 commonApp.put("/password", verifyToken("USER", "AUTHOR", "ADMIN"), async (req, res, next) => {
   try {
     const { currentPassword, newPassword } = req.body
 
-    // fetch full user doc since jwt doesnt have password
     const user = await UserModel.findById(req.user.id)
     if (!user) {
       return res.status(404).json({ message: "User not found" })
@@ -128,7 +117,6 @@ commonApp.put("/password", verifyToken("USER", "AUTHOR", "ADMIN"), async (req, r
       return res.status(400).json({ message: "Current password is incorrect" })
     }
 
-    // dont allow same password
     const isSamePassword = await compare(newPassword, user.password)
     if (isSamePassword) {
       return res.status(400).json({ message: "New password must differ from current password" })
