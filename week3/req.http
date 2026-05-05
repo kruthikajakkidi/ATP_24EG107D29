@@ -1,0 +1,90 @@
+# //req to protected route:token passed along with req
+# GET http://localhost:4000/user-api/users
+# cookie:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1va3NoYWFAZ21haWwiLCJpYXQiOjE3NzI4Nzg0NjEsImV4cCI6MTc3Mjg3ODQ4MX0.-ElhQaFA3OIZOXtWmN5qzwYswZwjKryT2ukJyzGhhYE; Path=/; HttpOnly; SameSite=Lax
+
+# ###
+
+# GET http://localhost:4000/user-api/users/69abd0ed41c9d338f6fe9a92
+
+# ###
+
+# POST http://localhost:4000/user-api/users
+# Content-Type: application/json
+
+# {
+# "username":"moksha",
+# "password":"kruthika",
+# "email":"mokshaa@gmail",
+# "age":19
+# }
+
+# ###
+
+# PUT http://localhost:4000/user-api/users/69abf59ea9aef8e5b10c03cc
+# Content-Type: application/json
+
+# {
+# "username":"kruthika",
+# "password":"kruthika",
+# "email":"kruthika@gmail",
+# "age":19
+# }
+
+# ###
+
+# POST http://localhost:4000/user-api/auth
+# Content-Type: application/json
+
+# {
+#     "email":"mokshaa@gmail",
+#     "password":"kruthika"
+# }
+
+
+# ###
+
+# DELETE http://localhost:4000/user-api/users/69aaeff9bc76e945d1001a05
+
+
+
+
+
+
+
+
+GET http://localhost:4000/product-api/products
+
+###
+
+GET http://localhost:4000/product-api/products/69ab0670416502070fb026df
+
+###
+
+POST http://localhost:4000/product-api/products
+Content-Type: application/json
+
+{
+"productId":1,
+"productName":"watch",
+"price":20000,
+"brand":"g-shock"
+}
+
+###
+
+PUT http://localhost:4000/product-api/products/69ab043e0439d0c0ddc93940
+Content-Type: application/json
+
+{
+"productId":1,
+"productName":"watch",
+"price":20000,
+"brand":"ck"
+}
+
+ 
+
+
+###
+
+DELETE http://localhost:4000/product-api/products/69ab0670416502070fb026df

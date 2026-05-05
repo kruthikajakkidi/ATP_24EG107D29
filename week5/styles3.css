@@ -1,0 +1,42 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+nav {
+    background-color: antiquewhite;
+    padding: 50px 100px 20px 115px;
+  
+}
+
+main {
+    background-color: rgb(165, 143, 143);
+    display: flex;
+    justify-content:space-around;
+    padding: 20px;
+    width: 100%;
+}
+
+section {
+    background-color: rgb(165, 143, 143);
+    width: 150px;
+    padding: 10px;
+    display: flex;
+     justify-content: center;
+    flex-direction: column;
+   
+}
+
+footer {
+    padding: 20px 20px;
+    margin-bottom: 30;
+    background-color: rgb(165, 143, 143);
+}
+
+button{
+    background-color:rgba(138, 115, 115, 0.764);
+}
