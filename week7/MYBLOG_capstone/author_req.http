@@ -1,0 +1,83 @@
+### REGISTER AUTHOR
+POST http://localhost:5000/common-api/users
+Content-Type: application/json
+
+{
+    "firstName":"AUTHOR2",
+    "lastName":"NAME",
+    "email":"author2@gmail.com",
+    "password":"author2xxx",
+    "role":"AUTHOR",
+    "profileImageUrl":"https://example.com/author2.jpg"
+}
+
+###
+### LOGIN AS AUTHOR
+POST http://localhost:5000/common-api/login
+Content-Type: application/json
+
+{
+    "email":"author2@gmail.com",
+    "password":"author2xxx"
+}
+
+###
+### WRITE ARTICLE (paste author _id from DB)
+POST http://localhost:5000/author-api/article
+Content-Type: application/json
+
+{
+    "author":"69b438381a14e355993f1ddf",
+    "title":"Introduction to AI",
+    "category":"AI",
+    "content":"CHAPTER 1"
+}
+
+###
+### GET OWN ARTICLES
+GET http://localhost:5000/author-api/article
+Content-Type: application/json
+
+###
+### UPDATE ARTICLE (paste article _id from DB)
+PUT http://localhost:5000/author-api/article
+Content-Type: application/json
+
+{
+    "articleId":"69b438db1a14e355993f1de8",
+    "title":"ARTIFICIAL INTELLIGENCE",
+    "category":"Technology",
+    "content":"CHAPTER 1 TO 5"
+}
+###
+### SOFT DELETE ARTICLE (paste article _id from DB)
+PATCH http://localhost:5000/author-api/article/69b438db1a14e355993f1de8
+Content-Type: application/json
+
+{
+    "isArticleActive":false
+}
+
+###
+### RESTORE ARTICLE (paste article _id from DB)
+PATCH http://localhost:5000/author-api/article/69b438db1a14e355993f1de8
+Content-Type: application/json
+
+{
+    "isArticleActive":true
+}
+
+###
+### LOGOUT
+GET http://localhost:5000/common-api/logout
+Content-Type: application/json
+
+
+
+
+
+
+
+
+
+

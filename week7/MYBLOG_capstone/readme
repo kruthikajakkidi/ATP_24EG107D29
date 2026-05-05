@@ -1,0 +1,40 @@
+1.generare package.json
+2.create .env file
+3.create express app and assign port
+4.connect db
+5.define schemas and create models
+     --user type schema
+        first name
+        last name
+        email(unique)
+        pasword
+        role
+        profile img url
+        isuseractive
+
+
+     --article type schema
+        author
+        title
+        category
+        content
+        comments
+        isarticleactive
+6.implement api
+7.create common api for register,login and logout
+
+
+
+xss--cross site scripting
+csrf--cross site resource forgery
+
+
+###FRONTEND
+     dynamic responsive user interface((ui/web page) requires Browser to open)
+                                 by using HTML TECH (only basic ui)-markup lang
+                                 css styles and responsiveness=cascading style sheet lang
+                                      part of css- boostap,tailwindcss
+      dynamic nature 
+                javascript
+                   reactJS,angular(only large scale.it is framework),vue,nextJS 
+

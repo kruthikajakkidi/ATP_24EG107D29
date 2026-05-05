@@ -1,0 +1,59 @@
+### REGISTER USER
+POST http://localhost:5000/common-api/users
+Content-Type: application/json
+
+{
+    "firstName":"JAKKIDI",
+    "lastName":"KRUTHIKA",
+    "email":"kruthika@gmail.com",
+    "password":"kruthika",
+    "role":"USER",
+    "profileImageUrl":"https://example.com/kruthika.jpg"
+}
+
+### LOGIN AS USER
+POST http://localhost:5000/common-api/login
+Content-Type: application/json
+
+{
+    "email":"kruthika@gmail.com",
+    "password":"kruthika"
+}
+
+
+### LOGOUT
+GET http://localhost:5000/common-api/logout
+Content-Type: application/json
+
+{
+    "email":"kruthika@gmail.com",
+    "password":"kruthika"
+}
+
+###
+//read articles of author
+GET http://localhost:5000/user-api/articles
+
+
+###
+//add comment
+PUT http://localhost:5000/user-api/articles
+Content-Type: application/json
+
+{
+    "articleId":"69b438db1a14e355993f1de8",
+    "comment":"this is useful article"
+}
+
+###
+//CHANGE PASSWORD
+PUT http://localhost:5000/common-api/password
+Content-Type: application/json
+
+{
+    "currentPassword":"kruthika",
+    "newPassword":"kruthika123"
+}
+
+
+
