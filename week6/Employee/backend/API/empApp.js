@@ -1,5 +1,5 @@
 import exp from "express";
-import { EmpModel } from "../models/EmpModel.js";
+import { EmpModel } from "../models/empModel.js";
 export const empRoute = exp.Router();
 
 //Create emp
