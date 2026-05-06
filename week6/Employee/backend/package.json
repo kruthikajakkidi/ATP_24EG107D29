@@ -1,4 +1,9 @@
 {
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+
   "dependencies": {
     "@tailwindcss/vite": "^4.2.2",
     "bcryptjs": "^3.0.3",
