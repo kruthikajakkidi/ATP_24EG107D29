@@ -4,7 +4,7 @@ import { counterContextObj } from "../contexts/ContextProvider"
 function Home() {
  
  return(
-  <div>home</div>
+  <div className="text-center bg-amber-300">home</div>
    
   )
 }

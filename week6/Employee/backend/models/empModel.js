@@ -26,5 +26,5 @@ const empSchema = new Schema(
   { strict: "throw", versionKey: false, timestamps: true },
 );
 
-//export modekl
+//export model
 export const EmpModel = model("emp", empSchema);

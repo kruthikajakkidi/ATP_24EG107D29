@@ -22,7 +22,7 @@ function EditEmployee() {
   const saveModified = async (modifiedEmp) => {
     try {
       setLoading(true);
-      const res = await api.put(`/emp-api/employees/${state._id}`, modifiedEmp); // ✅ added leading /
+      const res = await api.put(`/emp-api/employees/${state._id}`, modifiedEmp);
       if (res.status === 200) {
         navigate("/list");
       }
