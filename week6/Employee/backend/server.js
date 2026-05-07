@@ -8,8 +8,7 @@ const app = exp();
 
 // CORS middleware
 app.use(cors({
-  // origin: process.env.FRONTEND_URL || 
-  origin:"http://localhost:5173",
+  origin: process.env.FRONTEND_URL || "http://localhost:5173",
 }));
 
 // Body parser middleware
@@ -18,19 +17,20 @@ app.use(exp.json());
 // Emp API middleware
 app.use("/emp-api", empRoute);
 
-async function  connectDB(){
-    try{
-        await connect("mongodb://localhost:27017/week6_emp")
-        console.log("DB connected sucessfully")
-        
-        // start server
-        app.listen(4000,()=>console.log("server on port 4000..."))
-    }catch (err){
-        console.log("Error in connection:",err)
-    }
-}
-connectDB()
+async function connectDB() {
+  try {
+    await connect(process.env.MONGO_URI);  // ✅ Use env variable
+    console.log("DB connected successfully");
 
+    const PORT = process.env.PORT || 4000;  // ✅ Use Render's port
+    app.listen(PORT, () => console.log(`Server on port ${PORT}...`));
+
+  } catch (err) {
+    console.log("Error in connection:", err);
+    process.exit(1);
+  }
+}
+connectDB();
 
 // Error handling middleware
 app.use((err, req, res, next) => {
