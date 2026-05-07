@@ -17,7 +17,7 @@ app.use(exp.json());
 
 // Root route
 app.get("/", (req, res) => {
-  res.json({ status: "API is running ", message: "Use /emp-api routes" });
+  res.json({ status: "API is running ", message: "use api" });
 });
 
 // Emp API middleware
