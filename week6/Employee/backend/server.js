@@ -6,26 +6,24 @@ import cors from "cors";
 
 const app = exp();
 
-// CORS middleware
-app.use(cors({
-  origin:["https://employees-sand.vercel.app" || "http://localhost:5173"],
-  credentials:true
-}));
 
-// Body parser middleware
+app.use(
+  cors({
+    origin: ["https://employees-sand.vercel.app", "http://localhost:5173"],
+    credentials: true,
+  })
+);
+
 app.use(exp.json());
 
-// Root route
 app.get("/", (req, res) => {
-  res.json({ status: "API is running ", message: "use api" });
+  res.json({ status: "API is running", message: "use /emp-api" });
 });
 
-// Emp API middleware
 app.use("/emp-api", empRoute);
 
-// Error handling middleware
 app.use((err, req, res, next) => {
-  console.log("Error in middleware:", err.message);
+  console.error("Error in middleware:", err.message);
   res.status(err.status || 500).json({
     message: "error",
     reason: err.message,
@@ -39,9 +37,8 @@ async function connectDB() {
 
     const PORT = process.env.PORT || 4000;
     app.listen(PORT, () => console.log(`Server on port ${PORT}...`));
-
   } catch (err) {
-    console.log("Error in connection:", err);
+    console.error("Error in connection:", err);
     process.exit(1);
   }
 }

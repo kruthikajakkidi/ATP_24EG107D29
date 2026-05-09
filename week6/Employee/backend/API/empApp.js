@@ -2,40 +2,56 @@ import exp from "express";
 import { EmpModel } from "../models/empModel.js";
 export const empRoute = exp.Router();
 
-//Create emp
-empRoute.post("/employees", async (req, res) => {
-  const newEmp = req.body;
-  const empDoc = new EmpModel(newEmp);
-  await empDoc.save();
-  res.status(201).json({ message: "Emp created" });
-});
-//Read all emps
-empRoute.get("/employees", async (req, res) => {
-  let empList = await EmpModel.find();
-  res.status(200).json({ message: "list of emps", payload: empList });
-});
-//Update emp id
-empRoute.put("/employees/:id", async (req, res) => {
-  const modifiedEmp = req.body;
-  //find and update
-  let updatedEmp = await EmpModel.findByIdAndUpdate(
-    req.params.id,
-    {
-      $set: { ...modifiedEmp },
-    },
-    { returnDocument: "after" },
-  );
-  if (!updatedEmp) {
-    return res.status(404).json({ message: "emp not found" });
+
+// Create emp
+empRoute.post("/employees", async (req, res, next) => {
+  try {
+    const newEmp = req.body;
+    const empDoc = new EmpModel(newEmp);
+    await empDoc.save();
+    res.status(201).json({ message: "Employee created" });
+  } catch (err) {
+    next(err);
   }
-  res.status(200).json({ message: "employee updated", payload: updatedEmp });
 });
 
-//Delete emp by id
-empRoute.delete("/employees/:id", async (req, res) => {
-  let deletedEmp = await EmpModel.findByIdAndDelete(req.params.id);
-  if (!deletedEmp) {
-    return res.status(404).json({ message: "emp not found" });
+// Read all emps
+empRoute.get("/employees", async (req, res, next) => {
+  try {
+    const empList = await EmpModel.find();
+    res.status(200).json({ message: "List of employees", payload: empList });
+  } catch (err) {
+    next(err);
   }
-  res.status(200).json({ message: "employee deleted", payload: deletedEmp });
+});
+
+// Update emp by id
+empRoute.put("/employees/:id", async (req, res, next) => {
+  try {
+    const modifiedEmp = req.body;
+    const updatedEmp = await EmpModel.findByIdAndUpdate(
+      req.params.id,
+      { $set: { ...modifiedEmp } },
+      { returnDocument: "after", runValidators: true } 
+    );
+    if (!updatedEmp) {
+      return res.status(404).json({ message: "Employee not found" });
+    }
+    res.status(200).json({ message: "Employee updated", payload: updatedEmp });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Delete emp by id
+empRoute.delete("/employees/:id", async (req, res, next) => {
+  try {
+    const deletedEmp = await EmpModel.findByIdAndDelete(req.params.id);
+    if (!deletedEmp) {
+      return res.status(404).json({ message: "Employee not found" });
+    }
+    res.status(200).json({ message: "Employee deleted", payload: deletedEmp });
+  } catch (err) {
+    next(err);
+  }
 });
