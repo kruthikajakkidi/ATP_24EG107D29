@@ -18,8 +18,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// REMOVE THIS LINE
-// app.options("*", cors(corsOptions));
 
 app.use(exp.json());
 
