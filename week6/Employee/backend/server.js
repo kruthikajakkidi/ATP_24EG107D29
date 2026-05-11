@@ -9,7 +9,7 @@ const app = exp();
 
 app.use(
   cors({
-    origin: ["https://employeeweek6.vercel.app/", "http://localhost:5173"],
+    origin: ["https://employeeweek6.vercel.app", "http://localhost:5173"],
     credentials: true,
   })
 );
@@ -38,7 +38,7 @@ async function connectDB() {
     const PORT = process.env.PORT || 4000;
     app.listen(PORT, () => console.log(`Server on port ${PORT}...`));
   } catch (err) {
-    console.error("Error in connection:", err);
+    console.error("Error in DB connection:", err.message);
     process.exit(1);
   }
 }
