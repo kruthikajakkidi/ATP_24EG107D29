@@ -32,7 +32,7 @@ app.use((err, req, res, next) => {
 
 async function connectDB() {
   try {
-    await connect(process.env.DB_URI);
+    await connect(process.env.MONGO_URI);
     console.log("DB connected successfully");
 
     const PORT = process.env.PORT || 4000;
