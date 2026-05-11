@@ -11,12 +11,13 @@ function CreateEmp() {
   const {
     register,
     handleSubmit,
+    formState: { errors }, 
   } = useForm();
 
   const onFormSubmit = async (newEmpObj) => {
     try {
       setLoading(true);
-      let res = await api.post("/emp-api/employees", newEmpObj);
+      const res = await api.post("/emp-api/employees", newEmpObj);
       if (res.status === 201) {
         navigate("/list");
       }
@@ -27,49 +28,72 @@ function CreateEmp() {
     }
   };
 
-  if (loading) {
-    return <p className="text-center text-4xl">Loading....</p>;
-  }
-  if (error) {
-    return <p className="text-red-500 text-center text-3xl">{error}</p>;
-  }
+  if (loading) return <p className="text-center text-4xl">Loading....</p>;
+  if (error) return <p className="text-red-500 text-center text-3xl">{error}</p>;
 
   return (
     <div>
       <h1 className="text-5xl text-center text-blue-800">Create New Employee</h1>
-      <form className="max-w-md mx-auto mt-10" onSubmit={handleSubmit(onFormSubmit)}>
+      <form
+        className="max-w-md mx-auto mt-10"
+        onSubmit={handleSubmit(onFormSubmit)}
+      >
         <input
           type="text"
           placeholder="Enter name"
-          {...register("name")}
-          className="mb-3 border-2 p-3 w-full rounded-2xl"
+          {...register("name", { required: "Name is required" })}
+          className="mb-1 border-2 p-3 w-full rounded-2xl"
         />
+        {errors.name && (
+          <p className="text-red-500 text-sm mb-2">{errors.name.message}</p>
+        )}
+
         <input
           type="email"
           placeholder="Enter Email"
-          {...register("email")}
-          className="mb-3 border-2 p-3 w-full rounded-2xl"
+          {...register("email", { required: "Email is required" })}
+          className="mb-1 border-2 p-3 w-full rounded-2xl"
         />
+        {errors.email && (
+          <p className="text-red-500 text-sm mb-2">{errors.email.message}</p>
+        )}
+
         <input
           type="number"
           placeholder="Enter mobile number"
           {...register("mobile")}
           className="mb-3 border-2 p-3 w-full rounded-2xl"
         />
+
         <input
           type="text"
           placeholder="Enter designation"
-          {...register("designation")}
-          className="mb-3 border-2 p-3 w-full rounded-2xl"
+          {...register("designation", { required: "Designation is required" })}
+          className="mb-1 border-2 p-3 w-full rounded-2xl"
         />
+        {errors.designation && (
+          <p className="text-red-500 text-sm mb-2">
+            {errors.designation.message}
+          </p>
+        )}
+
         <input
           type="text"
           placeholder="Enter name of the company"
-          {...register("companyName")}
-          className="mb-3 border-2 p-3 w-full rounded-2xl"
+          {...register("companyName", { required: "Company name is required" })}
+          className="mb-1 border-2 p-3 w-full rounded-2xl"
         />
-        <button type="submit" className="text-2xl rounded-2xl bg-blue-900 text-white block mx-auto p-4">
-          Add Emp
+        {errors.companyName && (
+          <p className="text-red-500 text-sm mb-2">
+            {errors.companyName.message}
+          </p>
+        )}
+
+        <button
+          type="submit"
+          className="text-2xl rounded-2xl bg-blue-900 text-white block mx-auto p-4 mt-3"
+        >
+          Add Employee
         </button>
       </form>
     </div>
