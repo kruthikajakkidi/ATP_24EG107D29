@@ -8,7 +8,7 @@ const app = exp();
 
 const corsOptions = {
   origin: [
-    "https://employeweek6.vercel.app",
+    "https://employeeweek6.vercel.app",
     "http://localhost:5173",
   ],
   credentials: true,
