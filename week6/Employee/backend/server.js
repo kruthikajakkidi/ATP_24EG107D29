@@ -8,7 +8,7 @@ const app = exp();
 
 const corsOptions = {
   origin: [
-   "https://employeweek6.vercel.app",
+    "https://employeweek6.vercel.app",
     "http://localhost:5173",
   ],
   credentials: true,
@@ -17,18 +17,24 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
+
+// REMOVE THIS LINE
+// app.options("*", cors(corsOptions));
 
 app.use(exp.json());
 
 app.get("/", (req, res) => {
-  res.json({ status: "API is running", message: "use /emp-api" });
+  res.json({
+    status: "API is running",
+    message: "use /emp-api",
+  });
 });
 
 app.use("/emp-api", empRoute);
 
 app.use((err, req, res, next) => {
   console.error("Error in middleware:", err.message);
+
   res.status(err.status || 500).json({
     message: "error",
     reason: err.message,
@@ -38,10 +44,14 @@ app.use((err, req, res, next) => {
 async function connectDB() {
   try {
     await connect(process.env.MONGO_URI);
+
     console.log("DB connected successfully");
 
     const PORT = process.env.PORT || 4000;
-    app.listen(PORT, () => console.log(`Server on port ${PORT}...`));
+
+    app.listen(PORT, () => {
+      console.log(`Server on port ${PORT}...`);
+    });
   } catch (err) {
     console.error("Error in DB connection:", err.message);
     process.exit(1);
