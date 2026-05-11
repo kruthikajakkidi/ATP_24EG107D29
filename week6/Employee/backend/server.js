@@ -6,13 +6,18 @@ import cors from "cors";
 
 const app = exp();
 
+const corsOptions = {
+  origin: [
+   "https://employeweek6.vercel.app",
+    "http://localhost:5173",
+  ],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
 
-app.use(
-  cors({
-    origin: ["https://employeweek6.vercel.app/", "http://localhost:5173"],
-    credentials: true,
-  })
-);
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 app.use(exp.json());
 
