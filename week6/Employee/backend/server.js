@@ -4,23 +4,8 @@ import { connect } from "mongoose";
 import { empRoute } from "./API/empApp.js";
 import cors from "cors";
 
-process.on("uncaughtException", (err) => {
-  console.error("UNCAUGHT EXCEPTION:", err.message);
-  console.error(err.stack);
-  process.exit(1);
-});
-
-process.on("unhandledRejection", (reason) => {
-  console.error("UNHANDLED REJECTION:", reason);
-  process.exit(1);
-});
-
 const app = exp();
 
-console.log("Starting server...");
-console.log("NODE_ENV:", process.env.NODE_ENV);
-console.log("DB_URL present:", !!process.env.DB_URL);
-console.log("PORT:", process.env.PORT);
 
 app.use(
   cors({
@@ -47,16 +32,11 @@ app.use((err, req, res, next) => {
 
 async function connectDB() {
   try {
-    if (!process.env.DB_URL) {
-      throw new Error("DB_URL environment variable is not set!");
-    }
-
-    console.log("Connecting to MongoDB...");
-    await connect(process.env.DB_URL);
+    await connect(process.env.DB_URI);
     console.log("DB connected successfully");
 
     const PORT = process.env.PORT || 4000;
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}...`));
+    app.listen(PORT, () => console.log(`Server on port ${PORT}...`));
   } catch (err) {
     console.error("Error in DB connection:", err.message);
     process.exit(1);
