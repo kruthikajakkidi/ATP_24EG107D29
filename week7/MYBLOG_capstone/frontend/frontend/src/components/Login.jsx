@@ -1,91 +1,116 @@
-import { useForm } from "react-hook-form"
+import React, { useState } from 'react'
 import {
-  pageBackground, formCard, formTitle, formGroup, labelClass,
-  inputClass, submitBtn, errorClass, mutedText, linkClass, loadingClass,
-} from "../styles/common"
-import { NavLink, useNavigate } from "react-router"
-import { useAuth } from "../store/AuthStore"
-import { useEffect } from "react"
-import { toast } from "react-hot-toast"
+  pageBackground, pageWrapper, formCard, formTitle,
+  formGroup, labelClass, inputClass, submitBtn,
+  bodyText, secondaryBtn, linkClass,
+} from '../styles/common'
+import { NavLink, useNavigate } from 'react-router-dom'
+// import { useAuth } from '../context/AuthContext'
+import axios from 'axios'
 
-function Login() {
-  const { register, handleSubmit, formState: { errors } } = useForm()
+const api = axios.create({
+  baseURL: 'http://localhost:3000',
+  withCredentials: true,
+})
+
+const Login = () => {
+  const { login } = useAuth()
   const navigate = useNavigate()
 
-  const { login, currentUser, loading, error, isAuthenticated } = useAuth((state) => state)
+  const [formData, setFormData] = useState({ email: '', password: '' })
+  const [apiError, setApiError] = useState(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const onUserLogin = (userCredObj) => {
-    login(userCredObj)
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  // redirect to correct profile after login based on role
-  useEffect(() => {
-    if (isAuthenticated === true) {
-      if (currentUser.role === "USER") {
-        toast.success("Login success and redirecting to User Profile", { duration: 2000 })
-        navigate("/user-profile")
-      }
-      if (currentUser.role === "AUTHOR") {
-        toast.success("Login success and redirecting to Author Profile", { duration: 2000 })
-        navigate("/author-profile")
-      }
-      if (currentUser.role === "ADMIN") {
-        toast.success("Login success and redirecting to Admin Profile", { duration: 2000 })
-        navigate("/admin-profile")
-      }
-    }
-  }, [isAuthenticated, currentUser])
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setApiError(null)
+    setIsSubmitting(true)
 
-  if (loading) return <p className={loadingClass}>Loading....</p>
+    try {
+      const res = await api.post('/auth/login', formData)
+
+      login(res.data.user ?? res.data)
+
+      navigate('/')
+    } catch (err) {
+      setApiError(err.response?.data?.message || 'Login failed. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   return (
-    <div className={`${pageBackground} flex items-center justify-center py-16 px-4`}>
-      <div className={formCard}>
-        <h2 className={formTitle}>Sign In</h2>
+    <div className={pageBackground}>
+      <div className={pageWrapper}>
+        <div className={formCard}>
 
-        {error && <p className={errorClass}>{error}</p>}
+          {/* Title */}
+          <h1 className={formTitle}>Welcome Back</h1>
+          <p className={`${bodyText} text-center mb-8`}>
+            Login to continue to your social experience.
+          </p>
 
-        <form onSubmit={handleSubmit(onUserLogin)}>
+          {/* API Error */}
+          {apiError && (
+            <p className="text-red-500 text-sm text-center mb-4">{apiError}</p>
+          )}
 
-          <div className={formGroup}>
-            <label className={labelClass}>Email</label>
-            <input
-              type="email"
-              placeholder="you@example.com"
-              className={inputClass}
-              {...register("email", {
-                required: "Email is required",
-                validate: (value) => value.trim().length > 0 || "Email cannot be empty",
-              })}
-            />
-            {errors.email && <p className={errorClass}>{errors.email.message}</p>}
+          {/* Form */}
+          <form onSubmit={handleSubmit}>
+            <div className={formGroup}>
+              <label className={labelClass}>Email Address</label>
+              <input
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                className={inputClass}
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className={formGroup}>
+              <label className={labelClass}>Password</label>
+              <input
+                type="password"
+                name="password"
+                placeholder="Enter your password"
+                className={inputClass}
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <button
+              type="submit"
+              className={`${submitBtn} disabled:opacity-50 disabled:cursor-not-allowed`}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Logging in...' : 'Login'}
+            </button>
+          </form>
+
+          {/* Divider */}
+          <div className="flex items-center gap-3 my-8">
+            <div className="flex-1 border-t border-[#e8e8ed]" />
+            <span className="text-xs text-[#a1a1a6]">OR</span>
+            <div className="flex-1 border-t border-[#e8e8ed]" />
           </div>
 
-          <div className={formGroup}>
-            <label className={labelClass}>Password</label>
-            <input
-              type="password"
-              placeholder="••••••••"
-              className={inputClass}
-              {...register("password", {
-                required: "Password is required",
-                validate: (value) => value.trim().length > 0 || "Password cannot be empty",
-              })}
-            />
-            {errors.password && <p className={errorClass}>{errors.password.message}</p>}
-          </div>
+      
+          {/* Footer */}
+          <p className={`${bodyText} text-center text-sm mt-8`}>
+            Don't have an account?{' '}
+            <NavLink to="/register" className={linkClass}>Register</NavLink>
+          </p>
 
-          <div className="text-right -mt-2 mb-4">
-            <a href="/forgot-password" className={`${linkClass} text-xs`}>Forgot password?</a>
-          </div>
-
-          <button type="submit" className={submitBtn}>Sign In</button>
-        </form>
-
-        <p className={`${mutedText} text-center mt-5`}>
-          Don't have an account?{" "}
-          <NavLink to="/register" className={linkClass}>Create one</NavLink>
-        </p>
+        </div>
       </div>
     </div>
   )

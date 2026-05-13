@@ -33,7 +33,7 @@ function Home() {
             to="/login"
             className="bg-white text-stone-800 text-sm font-semibold px-10 py-3.5 rounded-full hover:bg-stone-100 transition"
           >
-            Start Reading →
+            Start Reading 
           </NavLink>
 
         </div>

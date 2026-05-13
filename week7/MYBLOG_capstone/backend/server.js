@@ -12,13 +12,12 @@ const app = exp();
 
 app.use(cors({
   origin:[ "http://localhost:5173",
-  "http://localhost:5174",
 "https://blog-app-rust-xi.vercel.app"],
   credentials: true,
 }));
 app.use(exp.json());
 app.use(cookieParser());
-
+ 
 // Routes
 app.use("/author-api", authorApp);
 app.use("/auth", commonApp);

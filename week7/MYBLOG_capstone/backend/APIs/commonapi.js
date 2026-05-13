@@ -1,12 +1,12 @@
 import exp from "express"
 import { UserModel } from "../models/UserModel.js"
 import { hash, compare } from "bcryptjs"
-import { config } from "dotenv"
-import jwt from "jsonwebtoken"
 import { verifyToken } from "../middlewares/verifyToken.js"
-import { upload } from "../config/multer.js"
 import { uploadToCloudinary } from "../config/cloudinaryUpload.js"
 import cloudinary from "../config/cloudinary.js"
+import { upload } from "../config/multer.js"
+import { config } from "dotenv"
+import jwt from "jsonwebtoken"
 
 const { sign } = jwt
 export const commonApp = exp.Router()

@@ -6,7 +6,7 @@ import { verifyToken } from "../middlewares/verifyToken.js"
 export const adminApp = exp.Router()
 
 
-// get all users and authors (no admins, no passwords)
+// get all users and authors  
 adminApp.get("/users", verifyToken("ADMIN"), async (req, res) => {
   try {
     const users = await UserModel.find(
