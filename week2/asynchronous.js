@@ -28,15 +28,11 @@ console.log("Result: Pass")
 
 console.log("OTP sent successfully")
 console.log("enter in 10 seconds")
-
 let seconds=10
-
 let intervalId=setInterval(()=>{
 seconds--
 console.log(`otp resend in ${seconds}`)
-
 if(seconds===0){
 clearInterval(intervalId)
 console.log(" resend OTP?")
-}
-},1000)
+}},1000)

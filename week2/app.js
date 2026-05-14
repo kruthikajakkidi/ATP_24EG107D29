@@ -1,12 +1,18 @@
-import {addTask,getAllTasks,completeTask} from './task.js'
+import { addTask, getAllTasks, completeTask } from './task.js'
 
-addTask("eating","HIGH",'2026-02-27')
-addTask("sleep","HIGH",'2026-02-28')
-addTask("coding","MEDIUM",'2026-02-28')
-addTask("gym","LOW",'2026-02-28')
-addTask("reading","HIGH",'2026-02-28')
+// add tasks
+addTask("eating", "HIGH", '2026-02-27')
+addTask("sleep", "HIGH", '2026-02-28')
+addTask("coding", "MEDIUM", '2026-02-28')
+addTask("gym", "LOW", '2026-02-28')
+addTask("reading", "HIGH", '2026-02-28')
+
+// display all tasks
 console.log(getAllTasks())
+
+// mark tasks as completed
 completeTask(1)
 completeTask(2)
-console.log(getAllTasks())
 
+// display updated tasks
+console.log(getAllTasks())

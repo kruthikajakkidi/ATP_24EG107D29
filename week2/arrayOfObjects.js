@@ -1,3 +1,4 @@
+//Operations on Array Of Objects
 const employees = [
   {
     eno: 101,
@@ -28,9 +29,6 @@ const employees = [
 
 
 // 1. Insert new Emp at 2nd position
-// 2. Remove an emp with name "Kiran"
-// 3.Change the last mark 95 to 75 of emp  "Sneha"
-
 employees.splice(1,0,{
     eno: 109,
     name: "Vidya",
@@ -38,9 +36,11 @@ employees.splice(1,0,{
   },)
   console.log(employees)
 
+// 2. Remove an emp with name "Kiran"
 employees.splice(4,1)
 console.log(employees)
 
+// 3.Change the last mark 95 to 75 of emp  "Sneha"
 employees.splice(3,0,  {
     eno: 103,
     name: "Sneha",
