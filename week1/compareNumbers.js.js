@@ -1,3 +1,4 @@
+//comparing two numbers 
 let a=3,b=6
 a>b?console.log("a"):console.log("b")
 //OR

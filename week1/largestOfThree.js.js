@@ -1,3 +1,4 @@
+ //finding largest among three numbers
  x=3,y=4,z=9
  if(x>y & x>z){
     console.log("a is bigger")

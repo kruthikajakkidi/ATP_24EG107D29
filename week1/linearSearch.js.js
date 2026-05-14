@@ -1,3 +1,4 @@
+//linear search of an element in array
 function index(arr,ele){
     for(let i=0;i<arr.length;i++){
         if (arr[i]==ele){

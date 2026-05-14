@@ -1,3 +1,4 @@
+//finding greatest element using function
 res=gre(2,4,7)
 function gre(x,y,z){
     if(x>y & x>z){

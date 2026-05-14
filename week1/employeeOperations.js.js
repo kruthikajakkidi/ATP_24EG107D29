@@ -1,3 +1,4 @@
+//Operations on Array of Objects
 const employees = [
   {
     eno: 101,
@@ -47,3 +48,4 @@ employees.splice(3,0,  {
     marks: [88, 92, 75],
   },)
 console.log(employees)
+

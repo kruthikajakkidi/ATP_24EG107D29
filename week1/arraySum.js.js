@@ -1,3 +1,4 @@
+//finding sum of array elements
 let marks=[95,75,34,65]
 let sum=0
 for(let i=0;i<marks.length;i++){

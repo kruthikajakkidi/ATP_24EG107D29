@@ -1,4 +1,4 @@
-
+//finding smallest element in array
 let marks=[95,75,34,65]
 let small
 for(let i=0;i<marks.length;i++){
