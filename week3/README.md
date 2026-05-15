@@ -1,4 +1,4 @@
-### WEEK-3 ASSIGNMNETS
+## WEEK-3 ASSIGNMNETS
 ### Overview:
 
 This project is a simple REST API for managing products using Node.js, Express, and MongoDB with Mongoose validation.
