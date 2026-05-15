@@ -1,4 +1,4 @@
-### Week-1 Assignments
+## Week-1 Assignments
 
 ### Overview:
 This week includes basic JavaScript programs covering conditionals,\
