@@ -1,4 +1,4 @@
-### Week-2 Assignments
+## Week-2 Assignments
 
 ### Overview:
 This week covers array methods, asynchronous JavaScript, object copying, REST APIs with Express.js, and modular ES module design.
