@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form"
 import { useLocation, useNavigate } from "react-router"
 import { useEffect } from "react"
+import { toast } from "react-hot-toast"
 import api from "../services/api"
 import {
   formCard, formTitle, formGroup, labelClass,
@@ -16,17 +17,26 @@ function EditArticle() {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm()
 
   useEffect(() => {
-    if (!article) return
+    if (!article) {
+      toast.error("No article data found. Redirecting...")
+      navigate("/author-profile/articles", { replace: true })
+      return
+    }
     setValue("title", article.title)
     setValue("category", article.category)
     setValue("content", article.content)
   }, [article])
 
   const updateArticle = async (modifiedArticle) => {
-    modifiedArticle.articleId = article._id
-    let res = await api.put("/author-api/articles", modifiedArticle)
-    if (res.status === 200) {
-      navigate(`/article/${article._id}`, { state: res.data.payload })
+    try {
+      modifiedArticle.articleId = article._id
+      const res = await api.put("/author-api/articles", modifiedArticle)
+      if (res.status === 200) {
+        toast.success("Article updated successfully!")
+        navigate(`/article/${article._id}`, { state: res.data.payload })
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to update article")
     }
   }
 

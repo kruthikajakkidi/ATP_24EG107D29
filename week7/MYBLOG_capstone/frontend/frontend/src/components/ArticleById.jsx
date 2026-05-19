@@ -1,235 +1,238 @@
+// ========================= ARTICLEBYID.JSX =========================
+
 import { useParams, useNavigate } from "react-router"
 import { useEffect, useState } from "react"
 import { useAuth } from "../store/AuthStore"
 import { toast } from "react-hot-toast"
 import { useForm } from "react-hook-form"
 import api from "../services/api"
-import {
-  articlePageWrapper, articleHeader, articleCategory, articleMainTitle,
-  articleAuthorRow, authorInfo, articleContent, articleFooter,
-  articleActions, editBtn, deleteBtn, loadingClass, errorClass,
-  inputClass, commentsWrapper, commentCard, commentHeader,
-  commentUserRow, avatar, commentUser, commentTime, commentText,
-} from "../styles/common.js"
 
 function ArticleByID() {
+
   const { id } = useParams()
+
   const navigate = useNavigate()
-  const { register, handleSubmit, reset: resetForm } = useForm()
+
+  const { register, handleSubmit, reset } = useForm()
 
   const user = useAuth((state) => state.currentUser)
-  const authLoading = useAuth((state) => state.loading)
 
   const [article, setArticle] = useState(null)
+
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
+
   const [commentLoading, setCommentLoading] = useState(false)
 
+
+
   useEffect(() => {
+
     const getArticle = async () => {
-      setLoading(true)
+
       try {
-        let res
 
-        // fetch based on role to avoid unnecessary fallback
-        if (user?.role === "AUTHOR") {
-          res = await api.get("/author-api/articles")
-          const found = res.data.payload?.find((a) => a._id === id)
-          if (!found) throw new Error("Article not found")
-          setArticle(found)
-        } else {
-          res = await api.get(`/user-api/article/${id}`)
-          setArticle(res.data.payload)
-        }
+        setLoading(true)
+
+        let res = await api.get(`/user-api/article/${id}`)
+
+        setArticle(res.data.payload)
+
       } catch (err) {
-        setError(err.response?.data?.message || err.message || "Failed to load article")
+
+        toast.error("Failed to load article")
+
       } finally {
+
         setLoading(false)
+
       }
+
     }
+
     getArticle()
-  }, [id, user])
 
-  const formatDate = (date) => {
-    return new Date(date).toLocaleString("en-IN", {
-      timeZone: "Asia/Kolkata",
-      dateStyle: "medium",
-      timeStyle: "short",
-    })
-  }
+  }, [id])
 
-  const toggleArticleStatus = async () => {
-    const newStatus = !article.isArticleActive
-    if (!window.confirm(newStatus ? "Restore this article?" : "Delete this article?")) return
-    try {
-      const res = await api.patch("/author-api/articles", {
-        articleId: article._id,
-        isArticleActive: newStatus,
-      })
-      setArticle(res.data.payload)
-      toast.success(res.data.message)
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Operation failed")
-    }
-  }
 
-  const editArticle = (articleObj) => {
-    navigate("/edit-article", { state: articleObj })
-  }
 
   const addComment = async (commentObj) => {
-    if (!commentObj.comment?.trim()) {
-      toast.error("Please write a comment before submitting")
-      return
-    }
+
     try {
+
       setCommentLoading(true)
+
       commentObj.articleId = article._id
-      const res = await api.put("/user-api/articles", commentObj)
-      if (res.status === 200) {
-        setArticle(res.data.payload)
-        resetForm()
-        toast.success("Comment added!")
-      }
+
+      let res = await api.put("/user-api/articles", commentObj)
+
+      setArticle(res.data.payload)
+
+      reset()
+
+      toast.success("Comment added!")
+
     } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to add comment")
+
+      toast.error("Failed to add comment")
+
     } finally {
+
       setCommentLoading(false)
+
     }
+
   }
 
-  const deleteComment = async (commentId) => {
-    if (!window.confirm("Delete this comment?")) return
-    try {
-      if (user?.role === "USER") {
-        const res = await api.delete(`/user-api/articles/${article._id}/comments/${commentId}`)
-        setArticle(res.data.payload)
-      } else if (user?.role === "AUTHOR") {
-        const res = await api.delete(`/author-api/articles/${article._id}/comments/${commentId}`)
-        setArticle(res.data.payload)
-      }
-      toast.success("Comment deleted")
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to delete comment")
-    }
+
+
+  if (loading) {
+
+    return (
+      <div className="min-h-screen bg-[#111111] flex justify-center items-center text-white">
+        Loading article...
+      </div>
+    )
+
   }
 
-  if (loading) return <p className={loadingClass}>Loading article...</p>
-  if (error) return <p className={errorClass}>{error}</p>
-  if (!article) return null
+
 
   return (
-    <div className={articlePageWrapper}>
 
-      <div className={articleHeader}>
-        <span className={articleCategory}>{article.category}</span>
-        <h1 className={`${articleMainTitle} uppercase`}>{article.title}</h1>
-        <div className={articleAuthorRow}>
-          <div className={authorInfo}>{user?.role}</div>
-          <div>{formatDate(article.createdAt)}</div>
-        </div>
-      </div>
+    <div className="min-h-screen bg-[#111111] text-white px-4 md:px-10 py-10">
 
-      <div className={articleContent}>{article.content}</div>
+      <div className="max-w-5xl mx-auto">
 
-      {user?.role === "AUTHOR" && (
-        <div className={articleActions}>
-          <button className={editBtn} onClick={() => editArticle(article)}>Edit</button>
-          <button className={deleteBtn} onClick={toggleArticleStatus}>
-            {article.isArticleActive ? "Delete" : "Restore"}
-          </button>
-        </div>
-      )}
+        {/* title */}
+        <div className="mb-10">
 
-      {user?.role === "USER" && (
-        <div className={articleActions}>
-          <h3 className="text-lg font-semibold text-[#1d1d1f] mb-3">Add a Comment</h3>
-          <form onSubmit={handleSubmit(addComment)}>
-            <input
-              type="text"
-              {...register("comment", { required: true })}
-              className={inputClass}
-              placeholder="Write your comment here..."
-            />
-            <button
-              type="submit"
-              disabled={commentLoading}
-              className="bg-amber-600 text-white px-5 py-2 rounded-2xl mt-4 hover:bg-black transition disabled:opacity-50"
-            >
-              {commentLoading ? "Posting..." : "Add Comment"}
-            </button>
-          </form>
-        </div>
-      )}
-
-      {!authLoading && !user && (
-        <div className="mt-6 p-4 bg-gray-100 rounded-xl text-center text-sm text-gray-500">
-          Please{" "}
-          <span
-            className="text-blue-600 cursor-pointer font-medium"
-            onClick={() => navigate("/login")}
-          >
-            log in
-          </span>{" "}
-          to add a comment.
-        </div>
-      )}
-
-      <div className={commentsWrapper}>
-        <h3 className="text-lg font-semibold text-[#1d1d1f] mb-4">
-          Comments ({article.comments?.length || 0})
-        </h3>
-
-        {article.comments?.length === 0 && (
-          <p className="text-[#a1a1a6] text-sm text-center py-6">
-            No comments yet. Be the first to comment!
+          <p className="text-[#FACC15] uppercase tracking-[0.2em] text-sm mb-4">
+            {article?.category}
           </p>
+
+          <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6">
+            {article?.title}
+          </h1>
+
+          <p className="text-white/50">
+            Published on{" "}
+            {new Date(article?.createdAt).toLocaleDateString()}
+          </p>
+
+        </div>
+
+
+
+
+
+        {/* content */}
+        <div className="bg-[#1A1A1A] border border-white/10 rounded-[35px] p-8 md:p-12 text-white/80 leading-loose text-lg shadow-2xl mb-10">
+
+          {article?.content}
+
+        </div>
+
+
+
+
+
+
+
+        {/* comment form */}
+        {user?.role === "USER" && (
+
+          <div className="bg-[#1A1A1A] border border-white/10 rounded-[35px] p-8 mb-2">
+
+            <h2 className="text-2xl font-semibold mb-6">
+              Add Comment
+            </h2>
+
+            <form onSubmit={handleSubmit(addComment)}>
+
+              <textarea
+                rows="4"
+                placeholder="Write your thoughts..."
+                className="w-full bg-[#222222] border border-white/10 rounded-2xl px-5 py-4 outline-none text-white placeholder:text-gray-500 focus:border-[#FACC15] transition resize-none"
+                {...register("comment")}
+              />
+
+              <button
+                type="submit"
+                disabled={commentLoading}
+                className="mt-5 bg-[#FACC15] hover:bg-yellow-300 text-black font-semibold px-8 py-3 rounded-2xl transition"
+              >
+
+                {commentLoading ? "Posting..." : "Add Comment"}
+
+              </button>
+
+            </form>
+
+          </div>
+
         )}
 
-        {article.comments?.map((commentObj, index) => {
-          const name = commentObj.user?.firstName
-            ? `${commentObj.user.firstName} ${commentObj.user.lastName || ""}`.trim()
-            : "Anonymous"
 
-          const firstLetter = name.charAt(0).toUpperCase()
 
-          const isOwnComment =
-            commentObj.user?._id?.toString() === user?._id?.toString() ||
-            commentObj.user?._id?.toString() === user?.id?.toString()
 
-          const canDelete = user?.role === "AUTHOR" || (user?.role === "USER" && isOwnComment)
 
-          return (
-            <div key={index} className={commentCard}>
-              <div className={commentHeader}>
-                <div className={commentUserRow}>
-                  <div className={avatar}>{firstLetter}</div>
-                  <div>
-                    <p className={commentUser}>{name}</p>
-                    <p className={commentTime}>{formatDate(commentObj.createdAt || new Date())}</p>
+
+
+
+        {/* comments */}
+        <div>
+
+          <h2 className="text-2xl font-semibold mb-6">
+            Comments ({article?.comments?.length || 0})
+          </h2>
+
+          <div className="space-y-5">
+
+            {article?.comments?.map((commentObj, index) => (
+
+              <div
+                key={index}
+                className="bg-[#1A1A1A] border border-white/10 rounded-3xl p-6"
+              >
+
+                <div className="flex items-center gap-4 mb-4">
+
+                  <div className="w-12 h-12 rounded-full bg-[#FACC15] text-black font-bold flex items-center justify-center">
+                    {commentObj?.user?.firstName?.charAt(0)}
                   </div>
+
+                  <div>
+
+                    <p className="font-semibold text-white">
+                      {commentObj?.user?.firstName}
+                    </p>
+
+                    <p className="text-sm text-white/40">
+                      {new Date(commentObj?.createdAt).toLocaleDateString()}
+                    </p>
+
+                  </div>
+
                 </div>
 
-                {canDelete && (
-                  <button
-                    onClick={() => deleteComment(commentObj._id)}
-                    className="ml-auto text-xs text-red-400 hover:text-red-600 transition px-2 py-1 rounded hover:bg-red-50"
-                  >
-                    Delete
-                  </button>
-                )}
+                <p className="text-white/70 leading-relaxed">
+                  {commentObj?.comment}
+                </p>
+
               </div>
-              <p className={commentText}>{commentObj.comment}</p>
-            </div>
-          )
-        })}
+
+            ))}
+
+          </div>
+
+        </div>
+
       </div>
 
-      <div className={articleFooter}>
-        Last updated: {formatDate(article.updatedAt)}
-      </div>
     </div>
+
   )
+
 }
 
 export default ArticleByID

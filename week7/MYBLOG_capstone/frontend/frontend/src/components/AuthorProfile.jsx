@@ -8,6 +8,7 @@ function AuthorProfile() {
   const navigate = useNavigate()
 
   const onLogout = async () => {
+    if (!window.confirm("Are you sure you want to logout?")) return
     await logout()
     navigate("/login")
   }
@@ -16,7 +17,7 @@ function AuthorProfile() {
     <div className={pageWrapper}>
 
       {/* profile header */}
-      <div className="bg-white border border-[#e8e8ed] rounded-3xl p-6 mb-8 shadow-sm flex items-center justify-between">
+      <div className="bg-gray-300 border border-[#e8e8ed] rounded-3xl p-6 mb-8 shadow-sm flex items-center justify-between">
         <div className="flex items-center gap-4">
           {currentUser?.profileImageUrl ? (
             <img
@@ -49,7 +50,7 @@ function AuthorProfile() {
           to="articles"
           className={({ isActive }) =>
             isActive
-              ? "bg-white px-5 py-2 rounded-full text-[#0066cc] text-sm font-medium shadow-sm"
+              ? "bg-yellow-200 px-5 py-2 rounded-full text-[#0066cc] text-sm font-medium shadow-sm"
               : `${navLinkClass} px-5 py-2`
           }
         >
@@ -60,7 +61,7 @@ function AuthorProfile() {
           to="write-article"
           className={({ isActive }) =>
             isActive
-              ? "bg-white px-5 py-2 rounded-full text-[#0066cc] text-sm font-medium shadow-sm"
+              ? "bg-yellow-200 px-5 py-2 rounded-full text-[#0066cc] text-sm font-medium shadow-sm"
               : `${navLinkClass} px-5 py-2`
           }
         >

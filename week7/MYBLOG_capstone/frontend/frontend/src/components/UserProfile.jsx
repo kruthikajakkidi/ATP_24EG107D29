@@ -57,7 +57,7 @@ function UserProfile() {
 
       {error && <p className={errorClass}>{error}</p>}
 
-      <div className="bg-white border border-[#e8e8ed] rounded-3xl p-6 mb-8 shadow-sm flex items-center justify-between">
+      <div className="bg-yellow-200 border border-[#e8e8ed] rounded-3xl p-6 mb-8 shadow-sm flex items-center justify-between">
         <div className="flex items-center gap-4">
           {currentUser?.profileImageUrl ? (
             <img
@@ -85,7 +85,7 @@ function UserProfile() {
       </div>
 
       <div className="mt-4">
-        <h3 className="text-lg font-semibold text-[#1d1d1f] mb-4">Latest Articles</h3>
+        <h3 className="text-lg font-semibold text-[#c3c8c8] mb-4">Latest Articles</h3>
 
         {articles.length === 0 ? (
           <p className="text-[#a1a1a6] text-sm text-center py-10">No articles available yet</p>

@@ -1,7 +1,8 @@
 import {
-  divider, errorClass, formCard, formGroup, formTitle,
-  inputClass, labelClass, pageBackground, submitBtn, mutedText,
+  errorClass,
+  mutedText,
 } from "../styles/common"
+
 import { useForm } from "react-hook-form"
 import { NavLink, useNavigate } from "react-router"
 import { useState } from "react"
@@ -9,14 +10,26 @@ import { toast } from "react-hot-toast"
 import api from "../services/api"
 
 function Register() {
-  const { register, handleSubmit, formState: { errors } } = useForm()
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm()
+
   const [loading, setLoading] = useState(false)
   const [apiError, setApiError] = useState(null)
   const [preview, setPreview] = useState(null)
+
   const navigate = useNavigate()
 
+
+
+
   const onUserRegister = async (userObj) => {
+
     const formData = new FormData()
+
     formData.append("role", userObj.role)
     formData.append("firstName", userObj.firstName)
     formData.append("lastName", userObj.lastName)
@@ -28,155 +41,325 @@ function Register() {
     }
 
     try {
+
       setLoading(true)
       setApiError(null)
+
       const res = await api.post("/auth/users", formData)
+
       if (res.status === 201) {
-        toast.success("Account created! Please login.")
+
+        toast.success("Account created successfully!")
         navigate("/login")
+
       }
+
     } catch (err) {
-      // backend returns message not error
-      setApiError(err.response?.data?.message || "Registration failed")
+
+      setApiError(
+        err.response?.data?.message || "Registration failed"
+      )
+
     } finally {
+
       setLoading(false)
+
     }
+
   }
 
-  return (
-    <div className={`${pageBackground} flex items-center justify-center py-16 px-4`}>
-      <div className={formCard}>
-        <h2 className={formTitle}>Create an Account</h2>
 
-        {apiError && <p className={errorClass}>{apiError}</p>}
+
+
+  return (
+
+    <div className="min-h-screen bg-[#111111] flex items-center justify-center px-4 py-16">
+
+      <div className="w-full max-w-2xl bg-[#1A1A1A] border border-white/10 rounded-[40px] p-8 md:p-12 shadow-2xl">
+
+        {/* heading */}
+        <div className="text-center mb-10">
+
+          <p className="text-[#D6B58A] uppercase tracking-[0.3em] text-xs mb-4">
+            welcome to myblog
+          </p>
+
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            Create Account
+          </h2>
+
+          <p className="text-white/50 text-lg">
+            Start reading and publishing articles with our blogging platform.
+          </p>
+
+        </div>
+
+
+
+        {/* api error */}
+        {apiError && (
+
+          <p className="bg-red-500/10 border border-red-500/20 text-red-400 text-sm rounded-2xl px-4 py-3 mb-6">
+            {apiError}
+          </p>
+
+        )}
+
+
 
         <form onSubmit={handleSubmit(onUserRegister)}>
 
-          <div className="mb-5">
-            <p className={labelClass}>Register as</p>
-            <div className="flex gap-6 mt-1">
-              <label className="flex items-center gap-2 cursor-pointer">
+          {/* role */}
+          <div className="mb-7">
+
+            <label className="text-sm text-white/70 block mb-3">
+              Register As
+            </label>
+
+            <div className="flex gap-4">
+
+              <label className="flex-1 flex items-center justify-center gap-3 bg-[#222222] border border-white/10 rounded-2xl py-4 cursor-pointer hover:bg-[#2A2A2A] transition">
+
                 <input
                   type="radio"
                   value="USER"
-                  {...register("role", { required: "Please select a role" })}
-                  className="accent-blue-600 w-4 h-4"
+                  {...register("role", {
+                    required: "Please select a role",
+                  })}
+                  className="accent-yellow-400"
                 />
-                <span className="text-sm">User</span>
+
+                <span className="text-white font-medium">
+                  User
+                </span>
+
               </label>
 
-              <label className="flex items-center gap-2 cursor-pointer">
+
+
+              <label className="flex-1 flex items-center justify-center gap-3 bg-[#222222] border border-white/10 rounded-2xl py-4 cursor-pointer hover:bg-[#2A2A2A] transition">
+
                 <input
                   type="radio"
                   value="AUTHOR"
-                  {...register("role", { required: "Please select a role" })}
-                  className="accent-blue-600 w-4 h-4"
+                  {...register("role", {
+                    required: "Please select a role",
+                  })}
+                  className="accent-yellow-400"
                 />
-                <span className="text-sm">Author</span>
+
+                <span className="text-white font-medium">
+                  Author
+                </span>
+
               </label>
+
             </div>
-            {errors.role && <p className={errorClass}>{errors.role.message}</p>}
+
+
+            {errors.role && (
+              <p className={errorClass}>
+                {errors.role.message}
+              </p>
+            )}
+
           </div>
 
-          <div className={divider} />
 
-          <div className="sm:flex gap-4 mb-4">
-            <div className="flex-1">
-              <label className={labelClass}>First Name</label>
+
+
+
+          {/* names */}
+          <div className="grid md:grid-cols-2 gap-5 mb-5">
+
+            <div>
+
+              <label className="text-sm text-white/70 block mb-2">
+                First Name
+              </label>
+
               <input
                 type="text"
-                className={inputClass}
                 placeholder="First name"
+                className="w-full bg-[#222222] border border-white/10 rounded-2xl px-5 py-4 outline-none text-white placeholder:text-gray-500 focus:border-[#FACC15] transition"
                 {...register("firstName", {
                   required: "First name is required",
-                  minLength: { value: 2, message: "At least 2 characters required" },
-                  maxLength: { value: 30, message: "Max 30 characters allowed" },
-                  validate: (v) => v.trim().length > 0 || "Cannot be empty",
                 })}
               />
-              {errors.firstName && <p className={errorClass}>{errors.firstName.message}</p>}
+
+              {errors.firstName && (
+                <p className={errorClass}>
+                  {errors.firstName.message}
+                </p>
+              )}
+
             </div>
 
-            <div className="flex-1">
-              <label className={labelClass}>Last Name</label>
+
+
+            <div>
+
+              <label className="text-sm text-white/70 block mb-2">
+                Last Name
+              </label>
+
               <input
                 type="text"
-                className={inputClass}
                 placeholder="Last name"
-                {...register("lastName", {
-                  maxLength: { value: 30, message: "Max 30 characters allowed" },
-                })}
+                className="w-full bg-[#222222] border border-white/10 rounded-2xl px-5 py-4 outline-none text-white placeholder:text-gray-500 focus:border-[#FACC15] transition"
+                {...register("lastName")}
               />
-              {errors.lastName && <p className={errorClass}>{errors.lastName.message}</p>}
+
             </div>
+
           </div>
 
-          <div className={formGroup}>
-            <label className={labelClass}>Email</label>
+
+
+
+
+
+          {/* email */}
+          <div className="mb-5">
+
+            <label className="text-sm text-white/70 block mb-2">
+              Email Address
+            </label>
+
             <input
               type="email"
-              className={inputClass}
               placeholder="you@example.com"
-              {...register("email", { required: "Email is required" })}
+              className="w-full bg-[#222222] border border-white/10 rounded-2xl px-5 py-4 outline-none text-white placeholder:text-gray-500 focus:border-[#FACC15] transition"
+              {...register("email", {
+                required: "Email is required",
+              })}
             />
-            {errors.email && <p className={errorClass}>{errors.email.message}</p>}
+
+            {errors.email && (
+              <p className={errorClass}>
+                {errors.email.message}
+              </p>
+            )}
+
           </div>
 
-          <div className={formGroup}>
-            <label className={labelClass}>Password</label>
+
+
+
+
+
+          {/* password */}
+          <div className="mb-5">
+
+            <label className="text-sm text-white/70 block mb-2">
+              Password
+            </label>
+
             <input
               type="password"
-              className={inputClass}
-              placeholder="Min. 8 characters"
-              {...register("password", { required: "Password is required" })}
+              placeholder="Minimum 8 characters"
+              className="w-full bg-[#222222] border border-white/10 rounded-2xl px-5 py-4 outline-none text-white placeholder:text-gray-500 focus:border-[#FACC15] transition"
+              {...register("password", {
+                required: "Password is required",
+              })}
             />
-            {errors.password && <p className={errorClass}>{errors.password.message}</p>}
+
+            {errors.password && (
+              <p className={errorClass}>
+                {errors.password.message}
+              </p>
+            )}
+
           </div>
 
-          <div className={formGroup}>
-            <label className={labelClass}>Profile Image</label>
+
+
+
+
+
+
+          {/* image upload */}
+          <div className="mb-8">
+
+            <label className="text-sm text-white/70 block mb-2">
+              Profile Image
+            </label>
+
             <input
               type="file"
-              className={inputClass}
               accept="image/png, image/jpeg"
-              {...register("profileImageUrl", {
-                validate: {
-                  fileType: (files) => {
-                    if (!files?.[0]) return true
-                    return ["image/png", "image/jpeg"].includes(files[0].type) || "Only JPG/PNG allowed"
-                  },
-                  fileSize: (files) => {
-                    if (!files?.[0]) return true
-                    return files[0].size <= 2 * 1024 * 1024 || "Max size 2MB"
-                  },
-                },
-              })}
+              className="w-full bg-[#222222] border border-white/10 rounded-2xl px-5 py-4 text-white file:border-0 file:bg-[#FACC15] file:px-4 file:py-2 file:rounded-xl file:text-black file:font-medium"
+              {...register("profileImageUrl")}
               onChange={(e) => {
+
                 const file = e.target.files[0]
-                if (file) setPreview(URL.createObjectURL(file))
+
+                if (file) {
+                  setPreview(URL.createObjectURL(file))
+                }
+
               }}
             />
-            {errors.profileImageUrl && <p className={errorClass}>{errors.profileImageUrl.message}</p>}
+
+
 
             {preview && (
-              <div className="mt-3 flex justify-center">
-                <img src={preview} alt="" className="w-24 h-24 rounded-full object-cover" />
+
+              <div className="flex justify-center mt-6">
+
+                <img
+                  src={preview}
+                  alt=""
+                  className="w-28 h-28 rounded-full object-cover border-4 border-[#FACC15] shadow-xl"
+                />
+
               </div>
+
             )}
+
           </div>
 
-          <button type="submit" className={submitBtn} disabled={loading}>
+
+
+
+
+
+
+          {/* submit */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-[#FACC15] hover:bg-yellow-300 text-black font-semibold py-4 rounded-2xl transition duration-300"
+          >
             {loading ? "Creating..." : "Create Account"}
           </button>
+
         </form>
 
-        <p className={`${mutedText} text-center mt-5`}>
+
+
+
+
+        {/* login */}
+        <p className={`${mutedText} text-center mt-8 text-white/50`}>
+
           Already have an account?{" "}
-          <NavLink to="/login" className="text-[#0066cc] font-medium">Sign in</NavLink>
+
+          <NavLink
+            to="/login"
+            className="text-[#FACC15] hover:text-yellow-300 font-medium"
+          >
+            Sign In
+          </NavLink>
+
         </p>
+
       </div>
+
     </div>
+
   )
+
 }
 
 export default Register

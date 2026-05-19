@@ -15,6 +15,7 @@ function AdminProfile() {
   const [error, setError] = useState(null)
 
   const onLogout = async () => {
+    if (!window.confirm("Are you sure you want to logout?")) return
     await logout()
     navigate("/login")
   }
@@ -52,7 +53,6 @@ function AdminProfile() {
     try {
       const res = await api.delete(`/admin-api/users/${user._id}`)
       toast.success(res.data.message)
-      // remove from list
       setUsers((prev) => prev.filter((u) => u._id !== user._id))
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to delete user")
@@ -141,7 +141,6 @@ function AdminProfile() {
                   {user.isUserActive ? "Block" : "Unblock"}
                 </button>
 
-                {/* delete user permanently */}
                 <button
                   onClick={() => deleteUser(user)}
                   className="bg-red-500 hover:bg-red-600 text-white text-sm font-medium px-5 py-1.5 rounded-xl transition"
