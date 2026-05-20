@@ -1,56 +1,69 @@
-## Week-7 Assignment – My Blog Application (Capstone Project)
-### Overview:
+# My Blog Application – Frontend
 
-#### This is a full-stack blogging platform built using the MERN stack with role-based authentication for Users, Authors, and Admins.
+## Overview
 
-### FEATURES:
-#### 1. Authentication & Authorization:
-Secure login and registration using JWT
-Role-based access for Users, Authors, and Admin
-#### 2. Blog Management:
-Authors can create, edit, and delete blog posts
-Users can read blogs and interact with content
-#### 3. User Features:
-Users can read blogs, comment, and manage profiles
-Profile image upload using Cloudinary
-#### 4. Admin Dashboard:
-Manage users and control access
-Block and unblock user accounts
-#### 5. Role-Based Dashboards:
-Separate dashboards for Users, Authors, and Admin
-Different UI and permissions for each role
+This is the frontend of the **My Blog Application**, a full-stack blogging platform built using the MERN stack.  
+The frontend provides responsive user interfaces for Users, Authors, and Admins with role-based dashboards and authentication.
 
-### FEATURES USED:
-JWT Authentication\
-Role-Based Access Control\
-REST API Integration\
-Cloudinary Image Upload\
-State Management (Zustand)\
-Responsive UI
-### TECHNOLOGIES USED:
+---
 
-React.js \
-Tailwind CSS \
-Zustand \
-Node.js \
-Express.js \
-MongoDB \
-JWT Authentication \
-Cloudinary \
-REST APIs \
-Render \
-Vercel
+# Features
 
-### Deployment:
+## Authentication & Authorization
+- User Registration and Login
+- JWT-based Authentication
+- Protected Routes
+- Role-Based Access Control
 
-Frontend → Vercel \
-Backend → Render \
-Database → MongoDB Atlas
+## Blog Features
+- View All Blogs
+- Read Single Blog
+- Create Blog Posts (Author)
+- Edit/Delete Blogs (Author)
+- Comment System
 
-### How to Run:
-#### Backend:
-Navigate to backend folder and run npm install\
-Configure .env file and run server using npm start
-#### Frontend:
-Navigate to frontend folder and run npm install\
-Run npm run dev and open local URL in browser
+## User Features
+- Profile Management
+- Cloudinary Image Upload
+- Responsive Design
+
+## Admin Features
+- Manage Users
+- Block/Unblock Accounts
+- Monitor Platform Activity
+
+---
+
+# Technologies Used
+
+- React.js
+- React Router DOM
+- Tailwind CSS
+- Zustand
+- Axios
+- React Hook Form
+- React Hot Toast
+- Vite
+
+---
+
+# Folder Structure
+
+```bash
+frontend/
+│
+├── src/
+│   ├── components/
+│   ├── pages/
+│   ├── layouts/
+│   ├── services/
+│   ├── store/
+│   ├── routes/
+│   ├── hooks/
+│   ├── utils/
+│   ├── App.jsx
+│   └── main.jsx
+│
+├── public/
+├── package.json
+└── vite.config.js
