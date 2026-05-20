@@ -88,7 +88,7 @@ function Home() {
                 to="/login"
                 className="bg-white text-black px-10 py-4 rounded-full font-semibold hover:bg-stone-100 transition duration-300"
               >
-                Start Reading
+               Explore →
               </NavLink>
 
             </div>
