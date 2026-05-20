@@ -2,6 +2,41 @@
 
 ### Overview:
 This week covers array methods, asynchronous JavaScript, object copying, REST APIs with Express.js, and modular ES module design.
+
+### Definitions:
+#### Array Methods: 
+Built-in JavaScript methods used to perform operations on arrays.
+#### filter(): 
+Returns elements that satisfy a condition.
+#### map(): 
+Creates a new array by transforming elements.
+#### reduce():
+Reduces array elements into a single value.
+#### find(): 
+Returns the first matching element from an array.
+#### findIndex(): 
+Returns the index of the first matching element.
+#### Asynchronous JavaScript: 
+Allows execution of tasks without blocking the main program flow.
+#### setTimeout(): 
+Executes a function after a specified delay.
+#### setInterval(): 
+Repeatedly executes a function at fixed intervals.
+#### clearInterval(): 
+Stops an interval timer.
+#### Shallow Copy: 
+Copies only top-level properties of an object.
+#### Deep Copy: Creates a completely independent copy including nested objects.
+#### structuredClone():
+Method used for deep copying objects in JavaScript.
+#### REST API: 
+Interface that allows communication between client and server using HTTP methods.
+#### CRUD Operations: 
+Create, Read, Update, and Delete operations on data.
+#### Express.js: 
+Node.js framework used for building APIs and web applications.
+#### ES Modules: 
+Modular JavaScript system using import and export.
 ### TASKS:
 1. Array Methods\
 -Performed filter(), map(), reduce(), find(), findIndex() on arrays and arrays of objects.
