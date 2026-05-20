@@ -108,7 +108,7 @@ function AdminProfile() {
           {users.map((user) => (
             <div
               key={user._id}
-              className="border border-black rounded-2xl px-4 sm:px-6 py-5 flex flex-col gap-2"
+              className="border  rounded-2xl px-4 sm:px-6 py-5 flex flex-col gap-2"
             >
               {/* name and role */}
               <div className="flex items-center gap-2 flex-wrap">
