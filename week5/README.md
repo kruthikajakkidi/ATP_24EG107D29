@@ -2,7 +2,46 @@
 ### Overview:
 
 -This week includes CSS layouts using Flexbox and Grid, responsive web design, HTML tables, and React applications with reusable components and Tailwind CSS.
+### Definitions:
+#### CSS Flexbox:
 
+One-dimensional layout system used to align and distribute items efficiently.
+
+#### CSS Grid:
+
+Two-dimensional layout system used for designing rows and columns together.
+
+#### Responsive Web Design:
+
+Design approach that makes webpages adapt to different screen sizes and devices.
+
+#### Media Queries:
+
+CSS feature used to apply styles based on screen size or device characteristics.
+
+#### React:
+
+JavaScript library used for building interactive user interfaces.
+
+#### React Components:
+
+Reusable blocks of code used to create parts of a React application.
+
+#### Props:
+
+Arguments passed to React components for dynamic rendering of data.
+
+#### React Hooks:
+
+Special React functions that allow state and lifecycle features in functional components.
+
+#### useState Hook:
+
+React hook used to manage and update component state.
+
+#### Tailwind CSS:
+
+Utility-first CSS framework used for rapid UI styling.
 ### TASKS:
 1. HTML Tables:\
 Built score and user tables using colspan and rowspan\
