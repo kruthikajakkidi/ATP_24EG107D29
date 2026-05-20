@@ -91,13 +91,6 @@ function Home() {
                 Start Reading
               </NavLink>
 
-              <NavLink
-                to="/register"
-                className="border border-white/20 px-10 py-4 rounded-full hover:bg-white/10 transition duration-300"
-              >
-                Become an Author
-              </NavLink>
-
             </div>
 
           </div>
