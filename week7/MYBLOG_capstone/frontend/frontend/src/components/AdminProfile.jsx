@@ -112,7 +112,7 @@ function AdminProfile() {
             >
               {/* name and role */}
               <div className="flex items-center gap-2 flex-wrap">
-                <p className="font-semibold text-[#1d1d1f] text-base">
+                   <p className="font-semibold text-[#d0d0d0] text-base">
                   {user.firstName} {user.lastName || ""}
                 </p>
                 <span
