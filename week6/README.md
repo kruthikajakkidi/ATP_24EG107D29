@@ -3,6 +3,47 @@
 
 #### This week includes full-stack MERN development, REST API integration, React applications, form handling, state management, and responsive UI design using Tailwind CSS.
 
+### Definitions:
+#### MERN Stack:
+
+Full-stack development stack consisting of MongoDB, Express.js, React.js, and Node.js.
+
+#### CRUD Operations:
+
+Create, Read, Update, and Delete operations performed on data.
+
+#### REST API:
+
+Interface used for communication between frontend and backend using HTTP methods.
+
+#### React.js:
+
+JavaScript library used to build interactive user interfaces.
+
+#### Express.js:
+
+Backend framework used for building APIs and server applications.
+
+#### MongoDB:
+
+NoSQL database used to store application data.
+
+#### Zustand:
+
+State management library used to manage global state in React applications.
+
+#### React Hook Form:
+
+Library used for handling forms and validation in React.
+
+#### Tailwind CSS:
+
+Utility-first CSS framework used for responsive UI design.
+
+#### API Integration:
+
+Connecting frontend applications with backend services using APIs.
+
 ### TASKS:
 ### 1. MERN Employee Management System:
 Built a full-stack CRUD application using React, Node.js, Express.js, and MongoDB\
